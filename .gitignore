@@ -128,5 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#tmp report data
+#tmp report data and temp files
 *.txt
+~*.*
