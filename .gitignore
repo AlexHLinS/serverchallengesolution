@@ -131,3 +131,6 @@ dmypy.json
 #tmp report data and temp files
 *.txt
 ~*.*
+
+#secrets
+*.token
