@@ -1,4 +1,4 @@
 #!/bin/bash
-sudo supervisorctl stop server_app
+sudo supervisorctl stop server
 git pull
-sudo supervisorctl start server_app
+sudo supervisorctl start server
