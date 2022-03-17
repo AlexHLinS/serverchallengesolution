@@ -3,6 +3,8 @@ import supplier_search
 
 app = Flask(__name__)
 
+CORS_HEADER = {'Access-Control-Allow-Origin': '*'}
+
 @app.route('/')
 # Возвращаем стартовую страницу
 def main():
@@ -12,24 +14,22 @@ def main():
 def getItems():
     if request.method == 'GET':
         # Выдача списка позиций для таблицы на стартовм экране
-        response = jsonify(supplier_search.getStartScreenData())
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
+        response = supplier_search.getStartScreenData()
+        return response, 200, CORS_HEADER
+    
     if request.method == 'POST':
         # Поиск конкретной позиции
         item_name = request.POST.get('search')
-        response = jsonify(supplier_search.getItemByName(item_name))
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
+        response = supplier_search.getItemByName(item_name)
+        return response, 200, CORS_HEADER
 
 @app.route('/api/suppliers',methods=['GET'])
 # Выдача информации по конкретной позиции
 def getItem():
     item = request.args.get('item')
     print(item)
-    response = jsonify(supplier_search.getNomenclatureFromId(item))
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response   
+    response = supplier_search.getNomenclatureFromId(item)
+    return response, 200, CORS_HEADER   
 
 
 
