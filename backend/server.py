@@ -2,6 +2,7 @@ from flask import Flask, render_template, jsonify, request
 import supplier_search
 
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False
 
 CORS_HEADER = {'Access-Control-Allow-Origin': '*'}
 
