@@ -136,4 +136,4 @@ dmypy.json
 *.token
 
 # bash scripts
-*.bash
+update_server.bash

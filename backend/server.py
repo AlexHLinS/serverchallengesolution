@@ -12,18 +12,24 @@ def main():
 def getItems():
     if request.method == 'GET':
         # Выдача списка позиций для таблицы на стартовм экране
-        return jsonify(supplier_search.getStartScreenData())
+        response = jsonify(supplier_search.getStartScreenData())
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
     if request.method == 'POST':
         # Поиск конкретной позиции
         item_name = request.POST.get('search')
-        return jsonify(supplier_search.getItemByName(item_name))
+        response = jsonify(supplier_search.getItemByName(item_name))
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
 
 @app.route('/api/suppliers',methods=['GET'])
 # Выдача информации по конкретной позиции
 def getItem():
     item = request.args.get('item')
     print(item)
-    return jsonify(supplier_search.getNomenclatureFromId(item))
+    response = jsonify(supplier_search.getNomenclatureFromId(item))
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response   
 
 
 
