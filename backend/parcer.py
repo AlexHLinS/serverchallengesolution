@@ -43,6 +43,6 @@ def getTopFromYandex(request_str):
 
 
 
-for item in ['* гайка М50','* болт М32','* манжета гост','* станок гост']:
+for item in ['* гайка М50']:#,'* болт М32','* манжета гост','* станок гост']:
     with open("~result.txt", "a") as result_file:
         result_file.write(json.dumps(getTopFromYandex(item),ensure_ascii=False))
