@@ -137,3 +137,6 @@ dmypy.json
 
 # bash scripts
 update_server.bash
+
+#databases
+*.db
