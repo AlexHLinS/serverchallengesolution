@@ -45,7 +45,7 @@ def getTopFromYandex(request_str):
 
 
 
-'''for item in ['* гайка М50']:#,'* болт М32','* манжета гост','* станок гост']:
+''''for item in ['* гайка М50']:#,'* болт М32','* манжета гост','* станок гост']:
     with open("~result.txt", "a") as result_file:
         result_file.write(json.dumps(getTopFromYandex(item),ensure_ascii=False))'''
         
@@ -131,3 +131,14 @@ def universalNomenclatureParcer(NomenclatureDataFrame):
             NomenclatureDataFrame['Характеристики'][i] = clearFromNone(NomenclatureDataFrame['Характеристики'][i])
 
     return NomenclatureDataFrame
+
+
+def universalNomenclatureParcerNoDF(nomenclature_string):
+    df = pd.DataFrame(data = [nomenclature_string], columns = ['Наименование'])
+    result = universalNomenclatureParcer(df)
+    name = str(result['Наименование'][0])
+    category = str(result['Стандарт'][0])
+    standart = str(result['Чистое наименование'][0])
+    options = str(result['Характеристики'][0])    
+    return name, category, standart, options
+    
