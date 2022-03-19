@@ -17,7 +17,10 @@ def getStartScreenData():
         s = {'id': data[0], 'label': data[1], 'activeSuppliers': data[2],
                       'reliableSuppliers': data[3], 'unverifiedSuppliers': data[4], 'unreliableSupplier': data[5]}
         if items.get(data[6]):
-            items[data[6]].append(s)
+            tmp = []
+            tmp = items[data[6]]
+            tmp.append(s)
+            items[data[6]] = tmp
         else:
             items[data[6]] = s
         
