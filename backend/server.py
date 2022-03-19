@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, send_from_directory
 import supplier_search
 import db_data_actualizer
+import db_worker
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -74,6 +75,12 @@ def getItem():
 # Тест-заглушка
 def test_status():
     return "app started!"
+
+@app.route('/api/statistics', methods=['GET'])
+# Статистические данные
+def getStatistics():
+    response = db_worker.getStatisticsData()
+    return response, 200, CORS_HEADER
 
 
 if __name__ == '__main__':

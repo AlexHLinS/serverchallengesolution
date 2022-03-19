@@ -1,6 +1,7 @@
 import sqlite3
 
 import dummy_items
+import json
 
 # функции создания и выполнения запросов не предусматривающих извлечение данных
 
@@ -271,7 +272,27 @@ def getSuppliersFromNomenclatureId(nomenclatureId):
             suplier_data = executeSQLQueryWithAnswer(
                 f'SELECT * FROM sc_suppliers WHERE inn={inn[0]}')[0]
             result.append({'name': suplier_data[1], 'inn': suplier_data[2], 'contacts': suplier_data[3], 'status': suplier_data[4],
-                        'capitalization': suplier_data[5], 'created_at': suplier_data[6], 'debet': suplier_data[7], 'credit': suplier_data[8]})
+                           'capitalization': suplier_data[5], 'created_at': suplier_data[6], 'debet': suplier_data[7], 'credit': suplier_data[8]})
         except:
             pass
     return result
+
+
+def getStatisticsData():
+    items_count = executeSQLQueryWithAnswer(
+        'SELECT COUNT(label) FROM sc_numenclature_items')[0][0]
+    urls_count = items_count
+    direct_suppliers = None
+    markeplaces = None
+    trash_urls = None
+    suppliers = executeSQLQueryWithAnswer('SELECT COUNT(name) FROM sc_suppliers')[0][0]
+    suppliers_active = executeSQLQueryWithAnswer(
+        'SELECT COUNT(id) FROM sc_suppliers WHERE status is \'ACTIVE\'')[0][0]
+    result = {'items_count': items_count,
+              'urls_count': urls_count,
+              'direct_suppliers': direct_suppliers,
+              'markeplaces': markeplaces,
+              'trash_urls': trash_urls,
+              'suppliers': suppliers,
+              "suppliers_active": suppliers_active}
+    return json.dumps(result, ensure_ascii=False)
