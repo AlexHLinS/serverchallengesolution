@@ -34,8 +34,9 @@ def getNomenclatureFromId(id):
 
 
 def getItemByName(itemName):
+    # получаем запрос и обновляем данные 
     test_json_text = {itemName: ""}
-    return json.dumps(test_json_text, ensure_ascii=False)
+    return getStartScreenData()
 
 def getSuppliersListFromNomenclatureId(nomenclatureId):
     test_json_text = db_worker.getSuppliersFromNomenclatureId(nomenclatureId)

@@ -1,7 +1,5 @@
 import sqlite3
 
-from anyio import run_async_from_thread
-
 import dummy_items
 
 # функции создания и выполнения запросов не предусматривающих извлечение данных
