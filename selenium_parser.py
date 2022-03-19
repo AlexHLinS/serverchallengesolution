@@ -1,6 +1,8 @@
 #from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup as bs
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -10,7 +12,7 @@ chrome_options.add_argument('--disable-dev-shm-usage')
 import pandas as pd
 
 
-PATH_TO_CHROME_DRIVER = '/usr/lib/chromium-browser/chromedriver'
+PATH_TO_CHROME_DRIVER = ChromeDriverManager().install()
 
 
 def get_company_list_by_product_metalloprokat(product_name):
