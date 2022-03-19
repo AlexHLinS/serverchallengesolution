@@ -1,4 +1,4 @@
-from pyvirtualdisplay import Display
+#from pyvirtualdisplay import Display
 from selenium import webdriver
 import pandas as pd
 
@@ -79,7 +79,7 @@ def get_company_list_by_product(product_name):
 
 
 
-display = Display(visible=0, size=(1600, 1200))
-display.start()
+# display = Display(visible=0, size=(1600, 1200))
+# display.start()
 print(get_company_list_by_product('* Гвоздь строительный круглый головка плоская 3х80 ГОСТ 4028'))
-display.stop()
+# display.stop()
