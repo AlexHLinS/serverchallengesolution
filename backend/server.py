@@ -10,7 +10,7 @@ CORS_HEADER = {'Access-Control-Allow-Origin': '*'}
 
 @app.route('/')
 # Возвращаем стартовую страницу
-def main()
+def main():
     db_data_actualizer.updateSuppliersList()
     return render_template('index.html')
 
