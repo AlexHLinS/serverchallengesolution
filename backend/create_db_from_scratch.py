@@ -3,4 +3,5 @@ import db_worker
 
 db_worker.createDBFromScratch()
 db_worker.createTablesFromScratch()
+db_worker.putDummyValues()
 

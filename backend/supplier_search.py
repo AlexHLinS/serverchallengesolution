@@ -1,6 +1,6 @@
 import json
 import db_worker
-
+import parcer
 
 def getStartScreenData():
     test_json_text = {'categories': [{'id': 0, 'title': "Название категории - Манжеты", 'items': [{'id': 0, 'label': "Манжета М50х70 ГОСТ 22704", 'activeSuppliers': 11, 'reliableSuppliers': 3, 'unverifiedSuppliers': 6, 'unreliableSupplier': 2, }, {'id': 1, 'label': "Манжета М50х70 ГОСТ 22706",
@@ -20,5 +20,5 @@ def getItemByName(itemName):
     return json.dumps(test_json_text, ensure_ascii=False)
 
 def getSuppliersLiftFromNomenclatureId(nomenclatureId):
-    test_json_text = {nomenclatureId: ""}
+    test_json_text = db_worker.getInfoForStartData(nomenclatureId)
     return json.dumps(test_json_text, ensure_ascii=False)
