@@ -29,12 +29,12 @@ def getNewItem():
 
 @app.route("/manifest.json")
 def manifest():
-    return send_from_directory('static', 'manifest.json')
+    return send_from_directory('templates', 'manifest.json')
 
 
 @app.route("/logo192.png")
 def logo192():
-    return send_from_directory('static', 'logo192.png')
+    return send_from_directory('templates', 'logo192.png')
 
 
 @app.route('/api/suppliers', methods=['GET'])
