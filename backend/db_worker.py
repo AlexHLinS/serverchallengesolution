@@ -267,8 +267,11 @@ def getSuppliersFromNomenclatureId(nomenclatureId):
     print(inns)
     result = []
     for inn in inns:
-        suplier_data = executeSQLQueryWithAnswer(
-            f'SELECT * FROM sc_suppliers WHERE inn={inn[0]}')[0]
-        result.append({'name': suplier_data[1], 'inn': suplier_data[2], 'contacts': suplier_data[3], 'status': suplier_data[4],
-                       'capitalization': suplier_data[5], 'created_at': suplier_data[6], 'debet': suplier_data[7], 'credit': suplier_data[8]})
+        try:
+            suplier_data = executeSQLQueryWithAnswer(
+                f'SELECT * FROM sc_suppliers WHERE inn={inn[0]}')[0]
+            result.append({'name': suplier_data[1], 'inn': suplier_data[2], 'contacts': suplier_data[3], 'status': suplier_data[4],
+                        'capitalization': suplier_data[5], 'created_at': suplier_data[6], 'debet': suplier_data[7], 'credit': suplier_data[8]})
+        except:
+            pass
     return result

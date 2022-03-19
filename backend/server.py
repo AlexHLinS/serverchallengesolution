@@ -30,14 +30,35 @@ def getNewItem():
     response = supplier_search.getItemByName(item_name)
     return response, 200, CORS_HEADER
 
-@app.route("/manifest.json")
-def manifest():
-    return send_from_directory('templates', 'manifest.json')
 
+# front's files:
+
+@app.route("/asset-manifest.json")
+def get_front_asset_manifest():
+    return send_from_directory('templates', 'asset-manifest.json')
+
+@app.route("/favicon.ico")
+def get_front_favicon():
+    return send_from_directory('templates', 'favicon.ico')
 
 @app.route("/logo192.png")
-def logo192():
+def get_front_logo192():
     return send_from_directory('templates', 'logo192.png')
+
+@app.route("/logo512.png")
+def get_front_logo512():
+    return send_from_directory('templates', 'logo512.png')
+
+@app.route("/manifest.json")
+def get_front_manifest():
+    return send_from_directory('templates', 'manifest.json')
+
+@app.route("/robots.txt")
+def get_front_robots():
+    return send_from_directory('templates', 'robots.txt')
+
+
+
 
 
 @app.route('/api/suppliers', methods=['GET'])
