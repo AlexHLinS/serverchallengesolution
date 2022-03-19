@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 #tmp report data and temp files
-*.txt
 ~*.*
 
 #secrets

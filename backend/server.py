@@ -22,10 +22,14 @@ def getItems():
 
     if request.method == 'POST':
         # Поиск конкретной позиции
-        item_name = request.POST.get('search')
+        item_name = request.form.get('search')
         response = supplier_search.getItemByName(item_name)
         return response, 200, CORS_HEADER
 
+@app.route('/manifest.json', methods=['GET'])
+def getManifestJson():
+    response = render_json('manifest.json')
+    return response, 200, CORS_HEADER
 
 @app.route('/api/suppliers', methods=['GET'])
 # Выдача информации по конкретной позиции
