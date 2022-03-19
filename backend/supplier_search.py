@@ -10,11 +10,15 @@ def getStartScreenData():
 
 def getNomenclatureFromId(id):
     
-    test_json_text = {'id': 0, 'label': "Манжета М50х70 ГОСТ 22704", 'activeSuppliers': 11,
+    test_json_text = {'id': id, 'label': "Манжета М50х70 ГОСТ 22704", 'activeSuppliers': 11,
                       'reliableSuppliers': 3, 'unverifiedSuppliers': 6, 'unreliableSupplier': 2}
     return json.dumps(test_json_text, ensure_ascii=False)
 
 
 def getItemByName(itemName):
     test_json_text = {itemName: ""}
+    return json.dumps(test_json_text, ensure_ascii=False)
+
+def getSuppliersLiftFromNomenclatureId(nomenclatureId):
+    test_json_text = {nomenclatureId: ""}
     return json.dumps(test_json_text, ensure_ascii=False)

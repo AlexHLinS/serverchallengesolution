@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_from_directory
 import supplier_search
 
 app = Flask(__name__)
@@ -22,21 +22,25 @@ def getItems():
 
     if request.method == 'POST':
         # Поиск конкретной позиции
-        item_name = request.form.get('search')
+        item_name = request.args.get('search')
+        print(f'looking for {item_name}')
         response = supplier_search.getItemByName(item_name)
         return response, 200, CORS_HEADER
 
-@app.route('/manifest.json', methods=['GET'])
-def getManifestJson():
-    response = render_json('manifest.json')
-    return response, 200, CORS_HEADER
+@app.route("/manifest.json")
+def manifest():
+    return send_from_directory('static', 'manifest.json')
+
+@app.route("/logo192.png")
+def logo192():
+    return send_from_directory('static', 'logo192.png')
 
 @app.route('/api/suppliers', methods=['GET'])
 # Выдача информации по конкретной позиции
 def getItem():
     item = request.args.get('item')
     print(item)
-    response = supplier_search.getNomenclatureFromId(item)
+    response = supplier_search.getSuppliersLiftFromNomenclatureId(item)
     return response, 200, CORS_HEADER
 
 
