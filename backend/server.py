@@ -13,20 +13,19 @@ def main():
     return render_template('index.html')
 
 
-@app.route('/api/items', methods=['GET', 'POST'])
+@app.route('/api/items', methods=['GET'])
 def getItems():
-    if request.method == 'GET':
-        # Выдача списка позиций для таблицы на стартовм экране
-        response = supplier_search.getStartScreenData()
-        return response, 200, CORS_HEADER
-
-    if request.method == 'POST':
-        # Поиск конкретной позиции
-        item_name = request.args.get('search')
-        print(f'looking for {item_name}')
-        response = supplier_search.getItemByName(item_name)
-        return response, 200, CORS_HEADER
-
+    # Выдача списка позиций для таблицы на стартовм экране
+    response = supplier_search.getStartScreenData()
+    return response, 200, CORS_HEADER
+        
+@app.route('/api/item', methods=['GET'])
+def getNewItem():
+    # Поиск конкретной позиции и добавление её на экран
+    item_name = request.args.get('search')
+    print(f'looking for {item_name}')
+    response = supplier_search.getItemByName(item_name)
+    return response, 200, CORS_HEADER
 
 @app.route("/manifest.json")
 def manifest():
