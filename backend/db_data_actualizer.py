@@ -53,6 +53,7 @@ def updateSuppliersList():
     goods_ids = db_worker.executeSQLQueryWithAnswer(
         'SELECT label FROM sc_numenclature_items WHERE id NOT IN (SELECT numenclature_id FROM sc_numenclature_supplier)')
     
+    
 
 
 updateSuppliersList()
