@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, send_from_directory
 import supplier_search
+import db_data_actualizer
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -9,7 +10,8 @@ CORS_HEADER = {'Access-Control-Allow-Origin': '*'}
 
 @app.route('/')
 # Возвращаем стартовую страницу
-def main():
+def main()
+    db_data_actualizer.updateSuppliersList()
     return render_template('index.html')
 
 

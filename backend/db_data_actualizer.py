@@ -5,6 +5,7 @@ from dadata import Dadata
 import db_worker
 
 
+
 def initDdataToken():
     with open('dadata.token') as dadatatokenfile:
         token = dadatatokenfile.read()
@@ -56,4 +57,4 @@ def updateSuppliersList():
     
 
 
-updateSuppliersList()
+#updateSuppliersList()
