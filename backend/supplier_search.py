@@ -35,7 +35,10 @@ def getNomenclatureFromId(id):
 
 def getItemByName(itemName):
     # получаем запрос и обновляем данные 
-    test_json_text = {itemName: ""}
+    
+    # распаршиваем наименование
+    # category, name, standart, 
+    
     return getStartScreenData()
 
 def getSuppliersListFromNomenclatureId(nomenclatureId):
