@@ -24,7 +24,7 @@ def get_company_list_by_product_metalloprokat(product_name):
     sellers = dict()
 
     #site_raw = requests.get(TARGET_URL+product_name, headers=headers).text
-    driver = webdriver.Chrome(executable_path = PATH_TO_CHROME_DRIVER, chrome_options=chrome_options)
+    driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER, chrome_options=chrome_options)
     driver.implicitly_wait(2)
     driver.get(TARGET_URL+product_name)
     site_raw = driver.page_source
@@ -61,7 +61,7 @@ def get_company_list_by_product_metalloprokat(product_name):
         try:
             # raw_for_inn = requests.get(
             #    GET_INN_URL+seller+GET_INN_URL_POSFIX, headers=headers)
-            driver = webdriver.Chrome(executable_path = PATH_TO_CHROME_DRIVER, chrome_options=chrome_options)
+            driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER, chrome_options=chrome_options)
             driver.implicitly_wait(2)
             driver.get(GET_INN_URL+seller+' ИНН')
             raw_for_inn = driver.page_source
