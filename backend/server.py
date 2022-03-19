@@ -27,20 +27,23 @@ def getItems():
         response = supplier_search.getItemByName(item_name)
         return response, 200, CORS_HEADER
 
+
 @app.route("/manifest.json")
 def manifest():
     return send_from_directory('static', 'manifest.json')
 
+
 @app.route("/logo192.png")
 def logo192():
     return send_from_directory('static', 'logo192.png')
+
 
 @app.route('/api/suppliers', methods=['GET'])
 # Выдача информации по конкретной позиции
 def getItem():
     item = request.args.get('item')
     print(item)
-    response = supplier_search.getSuppliersLiftFromNomenclatureId(item)
+    response = supplier_search.getSuppliersListFromNomenclatureId(item)
     return response, 200, CORS_HEADER
 
 

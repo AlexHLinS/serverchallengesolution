@@ -3,9 +3,27 @@ import db_worker
 import parcer
 
 def getStartScreenData():
-    test_json_text = {'categories': [{'id': 0, 'title': "Название категории - Манжеты", 'items': [{'id': 0, 'label': "Манжета М50х70 ГОСТ 22704", 'activeSuppliers': 11, 'reliableSuppliers': 3, 'unverifiedSuppliers': 6, 'unreliableSupplier': 2, }, {'id': 1, 'label': "Манжета М50х70 ГОСТ 22706",
-                                                                                                                                                                                                                                                        'activeSuppliers': 6, 'reliableSuppliers': 1, 'unverifiedSuppliers': 3, 'unreliableSupplier': 2, }]}, {'id': 1, 'title': "Название категории - Болты", 'items': [{'id': 3, 'label': "Болт М50х70 ГОСТ 61204", 'activeSuppliers': 5, 'reliableSuppliers': 1, 'unverifiedSuppliers': 2, 'unreliableSupplier': 2}]}]}
-    return json.dumps(test_json_text, ensure_ascii=False)
+    # получаем все категории
+    cat = db_worker.getAllCategories()
+    # получаем все позиции номенклатуры
+    raw = db_worker.getAllItems()
+    
+    result = list()
+    for element in cat:
+        result.append({'id':element[0], 'items':[], 'title':element[1]})
+    
+    items = dict()
+    for data in raw:
+        s = {'id': data[0], 'label': data[1], 'activeSuppliers': data[2],
+                      'reliableSuppliers': data[3], 'unverifiedSuppliers': data[4], 'unreliableSupplier': data[5]}
+        if items.get(data[6]):
+            items[data[6]].append(s)
+        else:
+            items[data[6]] = s
+        
+    for i in range(len(result)):
+        result[i]['items'].append(items[result[i]['id']])
+    return json.dumps({'categories':result}, ensure_ascii=False)
 
 
 def getNomenclatureFromId(id):
@@ -19,6 +37,6 @@ def getItemByName(itemName):
     test_json_text = {itemName: ""}
     return json.dumps(test_json_text, ensure_ascii=False)
 
-def getSuppliersLiftFromNomenclatureId(nomenclatureId):
-    test_json_text = db_worker.getInfoForStartData(nomenclatureId)
+def getSuppliersListFromNomenclatureId(nomenclatureId):
+    test_json_text = db_worker.getSuppliersFromNomenclatureId(nomenclatureId)
     return json.dumps(test_json_text, ensure_ascii=False)

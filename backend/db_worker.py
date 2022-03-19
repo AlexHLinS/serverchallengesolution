@@ -49,6 +49,30 @@ def executeSQLQuery(sql_request):
             sqlite_connection.close()
             print("Соединение с SQLite закрыто")
 
+
+def executeSQLQueryWithAnswer(sql_request):
+    # Выполняет SQL запрос с возвратом результата,
+    # использется для получения чего-либо из базы
+    result = None
+    try:
+        sqlite_connection = sqlite3.connect('sqlite_sc.db')
+        sqlite_create_table_query = sql_request
+        cursor = sqlite_connection.cursor()
+        print("База данных подключена к SQLite")
+        cursor.execute(sqlite_create_table_query)
+        result = cursor.fetchall()
+        print(f"Запрос:\n{sql_request}\n к SQLite выполнен")
+        print(f'Результат запроса: {result}')
+        cursor.close()
+    except sqlite3.Error as error:
+        print("Ошибка при подключении к sqlite", error)
+    finally:
+        if (sqlite_connection):
+            sqlite_connection.close()
+            print("Соединение с SQLite закрыто")
+    return result
+
+
 def putDummyValues():
     # заполняем тестовыми значениями
     try:
@@ -60,9 +84,11 @@ def putDummyValues():
         for inn in dummy_items.suppliers.keys():
             addSupplier(inn, dummy_items.suppliers[inn])
         for pair in dummy_items.pair:
-            executeSQLQuery(f'''INSERT or IGNORE INTO sc_numenclature_supplier (numenclature_id, supplier_inn) VALUES ({pair[0]}, \'{pair[1]}\');''')
+            executeSQLQuery(
+                f'''INSERT or IGNORE INTO sc_numenclature_supplier (numenclature_id, supplier_inn) VALUES ({pair[0]}, \'{pair[1]}\');''')
     except:
-        print('Произошла ошибка при создании демо значений в таблицах')    
+        print('Произошла ошибка при создании демо значений в таблицах')
+
 
 def createTablesFromScratch():
     try:
@@ -108,7 +134,8 @@ def getNumenclatureCategoryNameFromId(id):
     # в случае нахождения результата вып
     try:
         result = None
-        sql_request = str('SELECT title FROM sc_numenclature_categories WHERE id='+str(id))
+        sql_request = str(
+            'SELECT title FROM sc_numenclature_categories WHERE id='+str(id))
         sqlite_connection = sqlite3.connect('sqlite_sc.db')
         sqlite_create_table_query = sql_request
 
@@ -131,8 +158,9 @@ def getNumenclatureCategoryNameFromId(id):
             return
     pass
 
+
 def addNumenclatureCategories(cat_name):
-# добавляет запись в таблицу с категориями, если таковой там нет
+    # добавляет запись в таблицу с категориями, если таковой там нет
     category_id = -1
     try:
         # добавляем
@@ -146,7 +174,8 @@ def addNumenclatureCategories(cat_name):
         print(f"Запрос:\n{sql_request}\n к SQLite выполнен")
         cursor.close()
         # получаем присвоенный ключ
-        sql_request = str('SELECT id FROM sc_numenclature_categories WHERE title=\''+str(cat_name)+'\'')
+        sql_request = str(
+            'SELECT id FROM sc_numenclature_categories WHERE title=\''+str(cat_name)+'\'')
         sqlite_connection = sqlite3.connect('sqlite_sc.db')
         sqlite_create_table_query = sql_request
         cursor = sqlite_connection.cursor()
@@ -156,7 +185,7 @@ def addNumenclatureCategories(cat_name):
         print(f"Запрос:\n{sql_request}\n к SQLite выполнен")
         print(f'Присвоенный ID {category_id}')
         cursor.close()
-        
+
     except sqlite3.Error as error:
         print("Ошибка при подключении к sqlite", error)
     finally:
@@ -164,7 +193,6 @@ def addNumenclatureCategories(cat_name):
             sqlite_connection.close()
             print("Соединение с SQLite закрыто")
     return category_id
-    
 
 
 def addSupplier(supplier_inn, supplier_name):
@@ -182,7 +210,8 @@ def addSupplier(supplier_inn, supplier_name):
         cursor.close()
 
         # получаем присвоенный ID
-        sql_request = str('SELECT id FROM sc_suppliers WHERE inn=\''+str(supplier_inn)+'\'')
+        sql_request = str(
+            'SELECT id FROM sc_suppliers WHERE inn=\''+str(supplier_inn)+'\'')
         sqlite_connection = sqlite3.connect('sqlite_sc.db')
         sqlite_create_table_query = sql_request
         cursor = sqlite_connection.cursor()
@@ -200,7 +229,6 @@ def addSupplier(supplier_inn, supplier_name):
             sqlite_connection.close()
             print("Соединение с SQLite закрыто")
     return supplier_id
-
 
 
 def addNumItem(item_name, category_name):
@@ -225,9 +253,24 @@ def addNumItem(item_name, category_name):
             sqlite_connection.close()
             print("Соединение с SQLite закрыто")
     pass
-    
 
 
-def getInfoForStartData(nomenclatureId):
-    
-    return
+def getAllCategories():
+    return executeSQLQueryWithAnswer('SELECT * FROM sc_numenclature_categories')
+
+
+def getAllItems():
+    return executeSQLQueryWithAnswer('SELECT * FROM sc_numenclature_items')
+
+
+def getSuppliersFromNomenclatureId(nomenclatureId):
+    inns = executeSQLQueryWithAnswer(
+        f'SELECT supplier_inn FROM sc_numenclature_supplier WHERE numenclature_id={nomenclatureId}')
+    print(inns)
+    result = []
+    for inn in inns:
+        suplier_data = executeSQLQueryWithAnswer(
+            f'SELECT * FROM sc_suppliers WHERE inn={inn[0]}')[0]
+        result.append({'name': suplier_data[1], 'inn': suplier_data[2], 'contacts': suplier_data[3], 'status': suplier_data[4],
+                       'capitalization': suplier_data[5], 'created_at': suplier_data[6], 'debet': suplier_data[7], 'credit': suplier_data[8]})
+    return result
