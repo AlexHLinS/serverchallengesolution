@@ -57,4 +57,4 @@ def updateSuppliersList():
     
 
 
-#updateSuppliersList()
+updateSuppliersList()

@@ -137,8 +137,8 @@ def universalNomenclatureParcerNoDF(nomenclature_string):
     df = pd.DataFrame(data = [nomenclature_string], columns = ['Наименование'])
     result = universalNomenclatureParcer(df)
     name = str(result['Наименование'][0])
-    category = str(result['Стандарт'][0])
-    standart = str(result['Чистое наименование'][0])
+    standart = str(result['Стандарт'][0])
+    category = str(result['Чистое наименование'][0])
     options = str(result['Характеристики'][0])    
     return name, category, standart, options
     

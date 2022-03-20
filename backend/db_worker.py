@@ -1,5 +1,5 @@
 import sqlite3
-
+import parcer
 import dummy_items
 import json
 
@@ -78,8 +78,15 @@ def putDummyValues():
         # таблица категорий номенклатуры
         for item in dummy_items.categories.keys():
             addNumenclatureCategories(dummy_items.categories[item])
+        
         for item in dummy_items.num_items:
             addNumItem(item[0], item[1])
+        new_items = dummy_items.dummy_items
+        
+        for item in new_items:
+            name, category, standart, options = parcer.universalNomenclatureParcerNoDF(item)
+            addNumItem(name, category)
+            
         for inn in dummy_items.suppliers.keys():
             addSupplier(inn, dummy_items.suppliers[inn])
         for pair in dummy_items.pair:
