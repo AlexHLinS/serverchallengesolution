@@ -5,6 +5,18 @@ from bs4 import BeautifulSoup as bs
 import json
 import re
 import pandas as pd
+import requests
+
+headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36',
+           'accept-encoding': 'gzip, deflate, br',
+           'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
+           'accept': "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+           'connection': 'keep-alive',
+           'Sec-Fetch-Dest': 'document',
+           'Sec-Fetch-Mode': 'navigate',
+           'Sec-Fetch-Site': 'none',
+           'Sec-Fetch-User': '?1',
+           'Upgrade-Insecure-Requests': '1'}
 
 PATH_TO_CHROME_DRIVER = 'chrome_driver/chromedriver'
 
@@ -17,12 +29,12 @@ def getTopFromYandex(request_str):
     SEARCH_URL_POSTFIX = "&filters_docs=direct_cm"
     request_str = "купить "+request_str[1:]
 
-    #raw_result = requests.get(
-    #    SEARCH_URL+request_str+SEARCH_URL_POSTFIX, headers=headers).text
-    driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER)
-    driver.implicitly_wait(2)
-    driver.get(SEARCH_URL+request_str+SEARCH_URL_POSTFIX)
-    raw_result = driver.page_source
+    raw_result = requests.get(
+        SEARCH_URL+request_str+SEARCH_URL_POSTFIX, headers=headers).text
+    #driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER)
+    #driver.implicitly_wait(2)
+    #driver.get(SEARCH_URL+request_str+SEARCH_URL_POSTFIX)
+    #raw_result = driver.page_source
 
     parsed_result = bs(raw_result, features='lxml')
 
@@ -40,7 +52,7 @@ def getTopFromYandex(request_str):
     for _ in range(min(len(result_url), len(result_description))):
         result.append([result_url[_], result_description[_]])
 
-    driver.close()
+    #driver.close()
     return result
 
 
@@ -49,7 +61,70 @@ def getTopFromYandex(request_str):
     with open("~result.txt", "a") as result_file:
         result_file.write(json.dumps(getTopFromYandex(item),ensure_ascii=False))'''
         
-        
+
+
+def get_company_list_by_product_metalloprokat(product_name):
+    # парсер www.metalloprokat.ru
+
+    #TARGET_URL = 'https://www.metalloprokat.ru/company/?q='
+    TARGET_URL = 'https://msk.pulscen.ru/search/price?q='
+
+    sellers = dict()
+
+    site_raw = requests.get(TARGET_URL+product_name, headers=headers).text
+    #driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER)
+    #driver.implicitly_wait(2)
+    #driver.get(TARGET_URL+product_name)
+    #site_raw = driver.page_source
+    parsed = bs(site_raw, features='lxml')
+    
+    comp_count = int(parsed.find_all('div', {'class': 'hcl-tip'})[0].contents[0].split()[5])
+
+    if comp_count < 1:
+        return sellers
+
+    companies = parsed.find_all('span', {'class': 'cii-pseudo-link js-ykr-action js-ga-link js-catalogue-ecommerce js-encrypted-seo-link'})
+
+    for company in companies:
+        try:
+            seller_name = company.contents[0]
+            sellers[seller_name] = []
+            #sellers[seller_name].append(company.find_all('a')[0]['href'])
+        except:
+            pass
+
+    reviews = parsed.find_all(
+        'li', {'class': 'links_comment item medium float-left clearfix'})
+    for review in reviews:
+        try:
+            print(review.a['data-href'])
+        except:
+            pass
+
+    inn = ''
+    #driver.close()
+    for seller in sellers:
+        try:
+            #raw_for_inn = requests.get(
+            #    GET_INN_URL+seller+GET_INN_URL_POSFIX, headers=headers)
+            #driver = webdriver.Chrome(PATH_TO_CHROME_DRIVER)
+            #driver.implicitly_wait(2)
+            #driver.get(GET_INN_URL+seller+' ИНН')
+            #raw_for_inn = driver.page_source
+            #parsed = bs(raw_for_inn, features='lxml')
+            #inn = parsed.find_all('div', {'class': 'serp-list serp-list_right_yes serp-list_complementary_yes'})[
+            #0].find_all('div', {'class': 'KeyValue-ItemValue'})[0].text
+            '''company = parsed.find_all('div', {'class': 'company-item'})[0]
+            company_info = company.find_all(
+                'div', {'class': 'company-item-info'})[1]
+            inn = company_info.find_all('dd')[0].text'''
+            #driver.close()
+            pass
+        except:
+            pass
+        sellers[seller].append(inn)
+
+    return sellers
         
         
         
@@ -136,7 +211,7 @@ def universalNomenclatureParcer(NomenclatureDataFrame):
 def universalNomenclatureParcerNoDF(nomenclature_string):
     df = pd.DataFrame(data = [nomenclature_string], columns = ['Наименование'])
     result = universalNomenclatureParcer(df)
-    name = str(result['Наименование'][0])
+    name = str(result['Наименование'][0]).replace(r'[^a-zA-Zа-яёА-ЯЁ\s]','')
     standart = str(result['Стандарт'][0])
     category = str(result['Чистое наименование'][0])
     options = str(result['Характеристики'][0])    

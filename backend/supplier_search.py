@@ -38,8 +38,7 @@ def getNomenclatureFromId(id):
 
 
 def getItemByName(itemName):
-    # получаем запрос и обновляем данные 
-    
+
     # распаршиваем наименование
     name, category, standart, options =  parcer.universalNomenclatureParcerNoDF(itemName)
     db_worker.addNumItem(name, category)

@@ -81,6 +81,7 @@ def putDummyValues():
         
         for item in dummy_items.num_items:
             addNumItem(item[0], item[1])
+        
         new_items = dummy_items.dummy_items
         
         for item in new_items:
@@ -89,6 +90,7 @@ def putDummyValues():
             
         for inn in dummy_items.suppliers.keys():
             addSupplier(inn, dummy_items.suppliers[inn])
+        
         for pair in dummy_items.pair:
             executeSQLQuery(
                 f'''INSERT or IGNORE INTO sc_numenclature_supplier (numenclature_id, supplier_inn) VALUES ({pair[0]}, \'{pair[1]}\');''')

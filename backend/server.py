@@ -1,39 +1,60 @@
-from flask import Flask, render_template, jsonify, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory
 import supplier_search
 import db_data_actualizer
 import db_worker
 
+is_new_item_added = False # триггер необходимости обновления данных в базе
+
+
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 
+# Для возможности использования "из вне"
 CORS_HEADER = {'Access-Control-Allow-Origin': '*'}
-
 
 @app.route('/')
 # Возвращаем стартовую страницу
 def main():
-    db_data_actualizer.updateSuppliersData()
-    db_data_actualizer.updateSuppliersList()
     return render_template('index.html')
-
-
-@app.route('/api/items', methods=['GET'])
-def getItems():
-    # Выдача списка позиций для таблицы на стартовм экране
-    response = supplier_search.getStartScreenData()
-    return response, 200, CORS_HEADER
         
 @app.route('/api/item', methods=['GET'])
+# Поиск конкретной позиции и добавление её на экран
 def getNewItem():
-    # Поиск конкретной позиции и добавление её на экран
     item_name = request.args.get('search')
     print(f'looking for {item_name}')
     response = supplier_search.getItemByName(item_name)
     return response, 200, CORS_HEADER
 
+@app.route('/api/items', methods=['GET'])
+# Выдача списка позиций для таблицы на стартовм экране
+def getItems():
+    response = supplier_search.getStartScreenData()
+    return response, 200, CORS_HEADER
 
-# front's files:
+@app.route('/api/statistics', methods=['GET'])
+# Статистические данные
+def getStatistics():
+    response = db_worker.getStatisticsData()
+    return response, 200, CORS_HEADER
 
+@app.route('/api/suppliers', methods=['GET'])
+# Выдача информации по конкретной позиции
+def getItem():
+    item = request.args.get('item')
+    print(item)
+    response = supplier_search.getSuppliersListFromNomenclatureId(item)
+    return response, 200, CORS_HEADER
+
+@app.route('/api/update_db')
+# Запрос на обновление данных в базе
+def update_db():
+    if is_new_item_added:
+        db_data_actualizer.updateSuppliersData()
+        db_data_actualizer.updateSuppliersList()
+        return render_template('index.html')
+
+################################
+# Выдача файлов для фронтА:
 @app.route("/asset-manifest.json")
 def get_front_asset_manifest():
     return send_from_directory('templates', 'asset-manifest.json')
@@ -58,39 +79,22 @@ def get_front_manifest():
 def get_front_robots():
     return send_from_directory('templates', 'robots.txt')
 
-
-
-
-
-@app.route('/api/suppliers', methods=['GET'])
-# Выдача информации по конкретной позиции
-def getItem():
-    item = request.args.get('item')
-    print(item)
-    response = supplier_search.getSuppliersListFromNomenclatureId(item)
-    return response, 200, CORS_HEADER
-
-
 @app.route('/test_status')
 # Тест-заглушка
 def test_status():
-    return "app started!"
+    return "app is runing!"
 
-@app.route('/api/statistics', methods=['GET'])
-# Статистические данные
-def getStatistics():
-    response = db_worker.getStatisticsData()
-    return response, 200, CORS_HEADER
-
+################################
 
 if __name__ == '__main__':
     port = 0
+    
     try:
-        # для тестового запуска настройки порта в port.token
+        # для возможности настройки порта в port.token
         with open('backend/port.token', 'r') as portinfofile:
             port = int(portinfofile.read())
     except:
-        # на проде 5000 порт
+        # по умолчанию работает на порте 5000
         port = 5000
-    print(port)
+    #update_db()
     app.run(host='0.0.0.0', port=port)
