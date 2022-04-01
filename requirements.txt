@@ -74,13 +74,6 @@ fsspec==2022.2.0
 funcsigs==1.0.2
 future==0.18.2
 gast==0.4.0
-google-api-core==1.24.1
-google-api-python-client==1.12.8
-google-auth==1.24.0
-google-auth-httplib2==0.0.4
-google-auth-oauthlib==0.4.2
-google-pasta==0.2.0
-googleapis-common-protos==1.52.0
 greenlet==1.1.2
 grpcio==1.44.0
 h11==0.12.0
