@@ -198,7 +198,6 @@ python-utils==3.1.0
 pythreejs==2.3.0
 pytz==2022.1
 PyVirtualDisplay==3.0
-PyYAML==6.0
 pyzmq==22.3.0
 queuelib==1.6.2
 redis==3.5.3
