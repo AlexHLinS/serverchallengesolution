@@ -148,7 +148,6 @@ nbformat==5.2.0
 nest-asyncio==1.5.4
 nltk==3.6.5
 notebook==6.4.10
-numba==0.54.0
 numexpr==2.8.1
 numpy==1.22.3
 oauthlib==3.1.0
