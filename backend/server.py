@@ -51,7 +51,7 @@ def update_db():
     if is_new_item_added:
         db_data_actualizer.updateSuppliersData()
         db_data_actualizer.updateSuppliersList()
-        return render_template('index.html')
+    return render_template('index.html')
 
 ################################
 # Выдача файлов для фронтА:

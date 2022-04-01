@@ -7,6 +7,8 @@ import re
 import pandas as pd
 import requests
 
+tmplNonDigLetRem = re.compile('[^a-zA-Zа-яёА-ЯЁ\s]')
+
 headers = {'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36',
            'accept-encoding': 'gzip, deflate, br',
            'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
@@ -211,7 +213,8 @@ def universalNomenclatureParcer(NomenclatureDataFrame):
 def universalNomenclatureParcerNoDF(nomenclature_string):
     df = pd.DataFrame(data = [nomenclature_string], columns = ['Наименование'])
     result = universalNomenclatureParcer(df)
-    name = str(result['Наименование'][0]).replace(r'[^a-zA-Zа-яёА-ЯЁ\s]','')
+    name = str(result['Наименование'][0])
+    re.sub(tmplNonDigLetRem, '', name)
     standart = str(result['Стандарт'][0])
     category = str(result['Чистое наименование'][0])
     options = str(result['Характеристики'][0])    
