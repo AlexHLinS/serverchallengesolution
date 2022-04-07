@@ -105,7 +105,7 @@ itemloaders==1.0.4
 itsdangerous==1.1.0
 jdcal==1.4.1
 jedi==0.18.1
-Jinja2==2.11.2
+Jinja2==2.11.3
 Jinja2-Ext==0.1
 jmespath==1.0.0
 joblib==1.0.1
