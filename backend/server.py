@@ -24,21 +24,21 @@ def main():
 def get_new_item():
     item_name = request.args.get('search')
     print(f'looking for {item_name}')
-    response = supplier_search.getItemByName(item_name)
+    response = supplier_search.get_item_by_name(item_name)
     return response, 200, CORS_HEADER
 
 
 @app.route('/api/items', methods=['GET'])
 # Выдача списка позиций для таблицы на стартовм экране
 def get_items():
-    response = supplier_search.getStartScreenData()
+    response = supplier_search.get_start_screen_data()
     return response, 200, CORS_HEADER
 
 
 @app.route('/api/statistics', methods=['GET'])
 # Статистические данные
 def get_statistics():
-    response = db_worker.getStatisticsData()
+    response = db_worker.get_statistics_data()
     return response, 200, CORS_HEADER
 
 
@@ -47,7 +47,7 @@ def get_statistics():
 def get_item():
     item = request.args.get('item')
     print(item)
-    response = supplier_search.getSuppliersListFromNomenclatureId(item)
+    response = supplier_search.get_suppliers_list_from_nomenclature_id(item)
     return response, 200, CORS_HEADER
 
 
@@ -55,8 +55,8 @@ def get_item():
 # Запрос на обновление данных в базе
 def update_db():
     if is_new_item_added:
-        db_data_actualizer.updateSuppliersData()
-        db_data_actualizer.updateSuppliersList()
+        db_data_actualizer.update_suppliers_data()
+        db_data_actualizer.update_suppliers_list()
     return render_template('index.html')
 
 
