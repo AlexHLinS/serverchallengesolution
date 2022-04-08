@@ -2,15 +2,14 @@ from dadata import Dadata
 import db_worker
 import parcer
 import server
+import tools
 
 is_run_independently = False
 
 # загрузка токена для работы с API сервиса dadata, должен находится
 # в соответствующем файле
 def initDdataToken():
-    with open('dadata.token') as dadatatokenfile:
-        token = dadatatokenfile.read()
-    return Dadata(token)
+    return tools.getParamFromFileEnviron(None, 'dadata.token', 'dadata_token')
 
 
 # функция возвращает ИНН организации по совпадению
@@ -18,11 +17,13 @@ def initDdataToken():
 # возвращается первая компания в выдаче
 def getInnFromName(name):
     dadata = initDdataToken()
-    result = dadata.suggest("party", name)
-    try:
-        result = result[0]['data']['inn']
-    except:
-        result = None
+    result = None
+    if dadata:
+        result = dadata.suggest("party", name)
+        try:
+            result = result[0]['data']['inn']
+        except KeyError:
+            pass
     return result
 
 

@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_from_directory
 import supplier_search
 import db_data_actualizer
 import db_worker
+import tools
 
 is_new_item_added = False  # тригер необходимости обновления данных в базе
 
@@ -20,7 +21,7 @@ def main():
 
 @app.route('/api/item', methods=['GET'])
 # Поиск конкретной позиции и добавление её на экран
-def getNewItem():
+def get_new_item():
     item_name = request.args.get('search')
     print(f'looking for {item_name}')
     response = supplier_search.getItemByName(item_name)
@@ -29,21 +30,21 @@ def getNewItem():
 
 @app.route('/api/items', methods=['GET'])
 # Выдача списка позиций для таблицы на стартовм экране
-def getItems():
+def get_items():
     response = supplier_search.getStartScreenData()
     return response, 200, CORS_HEADER
 
 
 @app.route('/api/statistics', methods=['GET'])
 # Статистические данные
-def getStatistics():
+def get_statistics():
     response = db_worker.getStatisticsData()
     return response, 200, CORS_HEADER
 
 
 @app.route('/api/suppliers', methods=['GET'])
 # Выдача информации по конкретной позиции
-def getItem():
+def get_item():
     item = request.args.get('item')
     print(item)
     response = supplier_search.getSuppliersListFromNomenclatureId(item)
@@ -100,14 +101,12 @@ def test_status():
 ################################
 
 if __name__ == '__main__':
-    port = 0
+    if tools.get_file_existing_status('sqlite_sc.db'):
+        pass
+    else:
+        # TODO: implement empty db creations
+        print('db not found')
+    # trying to get port
+    port = int(tools.get_param_from_file_environ(5000, 'port.token', 'server_web_app_port'))
 
-    try:
-        # для возможности настройки порта в port.token
-        with open('port.token', 'r') as portinfofile:
-            port = int(portinfofile.read())
-    except FileNotFoundError:
-        # по умолчанию работает на порте 5000
-        port = 5000
-    # update_db()
     app.run(host='0.0.0.0', port=port)
